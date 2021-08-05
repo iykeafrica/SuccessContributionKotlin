@@ -1,13 +1,9 @@
 package com.example.successcontribution.screens.dashboard
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import com.example.successcontribution.R
-import com.example.successcontribution.databinding.ActivityDashBoardBinding
-import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
-import com.example.successcontribution.screens.common.dialogs.ServerErrorDialogFragment
 import com.example.successcontribution.shared.Constant
 import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
 import com.example.successcontribution.shared.Constant.LOGIN_ROLE_KEY
@@ -99,6 +95,16 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
 
     override fun goToAdminPage() {
         Log.d(TAG, "goToAdminPage: goToAdminPage")
+    }
+    
+    companion object {
+        fun loadDashboard(context: Context, loginRole: String, balance: String, firstName: String) {
+            val intent = Intent( context, DashBoardActivity::class.java)
+            intent.putExtra(LOGIN_ROLE_KEY, loginRole)
+            intent.putExtra(Constant.SAVINGS_BALANCE_KEY, balance)
+            intent.putExtra(FIRST_NAME_KEY, firstName)
+            context.startActivity(intent)
+        }
     }
 
 }
