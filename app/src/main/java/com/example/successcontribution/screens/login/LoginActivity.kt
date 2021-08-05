@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.successcontribution.model.request.UserLoginRequestModel
-import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
 import com.example.successcontribution.shared.Constant.LAST_NAME_KEY
@@ -18,7 +17,6 @@ import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.screens.common.Pref
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
-import com.example.successcontribution.screens.common.dialogs.ServerErrorDialogFragment
 
 
 class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
@@ -28,7 +26,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var loginViewMvc: LoginViewMvc
-    private lateinit var successContributionsApi: SuccessContributionsApi
+    private lateinit var attemptLoginUseCase: AttemptLoginUseCase
     private lateinit var screensNavigator: ScreensNavigator
     private lateinit var dialogsNavigator: DialogsNavigator
     private lateinit var username: String
@@ -40,7 +38,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         loginViewMvc = LoginViewMvc(this, null)
         setContentView(loginViewMvc.rootView)
 
-        successContributionsApi = AttemptLoginUseCase().successContributionsApi()
+        attemptLoginUseCase = AttemptLoginUseCase()
         screensNavigator = ScreensNavigator(this)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
@@ -67,17 +65,14 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
             loginViewMvc.showProgressIndication()
 
             try {
-                val response = successContributionsApi.login(userLoginRequestModel)
-                if (response.isSuccessful) {
-                    val headerList: Headers = response.headers()
-                    onAttemptSuccess(headerList)
-                } else {
-                    onAttemptFail()
+                when (val result = attemptLoginUseCase.attemptLogin(userLoginRequestModel)) {
+                    is AttemptLoginUseCase.Result.Success -> {
+                        onAttemptSuccess(result.headerList)
+                    }
+                    is AttemptLoginUseCase.Result.Failure -> {
+                        onAttemptFail()
+                    }
                 }
-
-            } catch (e: Throwable) {
-                if (e != CancellationException())
-                    onAttemptFail()
             } finally {
                 loginViewMvc.hideProgressIndication()
             }
