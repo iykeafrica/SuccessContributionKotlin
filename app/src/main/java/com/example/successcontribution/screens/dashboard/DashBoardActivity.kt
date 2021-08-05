@@ -15,82 +15,48 @@ import com.example.successcontribution.shared.Constant.USER
 import kotlinx.android.synthetic.main.activity_dash_board.*
 import android.content.Intent
 import android.content.DialogInterface
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 
 import com.example.successcontribution.screens.login.LoginActivity
 
-class DashBoardActivity : AppCompatActivity(){
+private val TAG = DashBoardActivity::class.java.simpleName
 
-    private lateinit var binding: ActivityDashBoardBinding
+class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
+
     private lateinit var preferences: SharedPreferences
-    private var userRole: String? = ""
+
+    private lateinit var dashBoardViewMvc: DashBoardViewMvc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityDashBoardBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        dashBoardViewMvc = DashBoardViewMvc(this, null)
+
+        setContentView(dashBoardViewMvc.rootView)
 
         preferences = applicationContext.getSharedPreferences(Constant.MY_PREF, 0)
 
-        val intent = intent
-        if (intent.hasExtra(LOGIN_ROLE_KEY)){
-            checkUserSignIn();
+        if (intent.hasExtra(LOGIN_ROLE_KEY)) {
+            dashBoardViewMvc.checkUserSignIn(intent, preferences);
         }
 
     }
 
     override fun onResume() {
         super.onResume()
-        binding.userSignedIn.visibility = View.GONE
-        binding.admin.visibility = View.GONE
-        checkUserSignIn()
+        dashBoardViewMvc.hideUserRole()
+        dashBoardViewMvc.checkUserSignIn(intent, preferences)
     }
 
-    private fun checkUserSignIn() {
-        val role = intent.getStringExtra((LOGIN_ROLE_KEY))
-
-        if (role.equals(USER) || USER == preferences.getString(LOGIN_ROLE_KEY, "")) {
-            binding.userSignedIn.visibility = View.VISIBLE
-            binding.name.text = preferences.getString(FIRST_NAME_KEY, "")
-
-            userRole = preferences.getString(LOGIN_ROLE_KEY, "")
-
-//            checkLoanApplications()
-//            requestLoan()
-//            profile()
-//            listUsers()
-//            guaranteeLoan()
-
-        } else {
-            binding.admin.visibility = View.VISIBLE
-            binding.name.text = preferences.getString(FIRST_NAME_KEY, "")
-//            goToAdminPage()
-        }
+    override fun onStart() {
+        dashBoardViewMvc.registerListener(this)
+        super.onStart()
     }
 
-    private fun checkLoanApplications() {
-        TODO("Not yet implemented")
-    }
-
-    private fun requestLoan() {
-        TODO("Not yet implemented")
-    }
-
-    private fun listUsers() {
-        TODO("Not yet implemented")
-    }
-
-    private fun profile() {
-        TODO("Not yet implemented")
-    }
-
-    private fun guaranteeLoan() {
-        TODO("Not yet implemented")
-    }
-
-    private fun goToAdminPage() {
-        TODO("Not yet implemented")
+    override fun onStop() {
+        super.onStop()
+        dashBoardViewMvc.unregisterListener(this)
     }
 
 
@@ -109,6 +75,30 @@ class DashBoardActivity : AppCompatActivity(){
         }
         val alert: AlertDialog = builder.create()
         alert.show()
+    }
+
+    override fun checkLoanApplications() {
+        Log.d(TAG, "checkLoanApplications: checkLoanApplications")
+    }
+
+    override fun requestLoan() {
+        Log.d(TAG, "requestLoan: requestLoan")
+    }
+
+    override fun profile() {
+        Log.d(TAG, "profile: profile")
+    }
+
+    override fun listUsers() {
+        Log.d(TAG, "listUsers: listUsers")
+    }
+
+    override fun guaranteeLoan() {
+        Log.d(TAG, "guaranteeLoan: guaranteeLoan")
+    }
+
+    override fun goToAdminPage() {
+        Log.d(TAG, "goToAdminPage: goToAdminPage")
     }
 
 }

@@ -41,25 +41,28 @@ import com.example.successcontribution.R
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
+import kotlin.math.log
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private lateinit var binding: ActivityLoginBinding
     private lateinit var retrofit: Retrofit
     private lateinit var successContributionsApi: SuccessContributionsApi
-    private lateinit var progressDialog : ProgressDialog
+
     private lateinit var preferences: SharedPreferences
+    private lateinit var loginViewMvc: LoginViewMvc
+    private lateinit var username: String
+    private lateinit var password: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        loginViewMvc = LoginViewMvc(this, null)
 
-        hideOpeningKeyBoard(this, binding.etUsername)
+        setContentView(loginViewMvc.rootView)
 
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
 
@@ -79,19 +82,18 @@ class LoginActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        progressDialog = ProgressDialog(this@LoginActivity, R.style.MyAlertDialogStyle)
-
         successContributionsApi = retrofit.create(SuccessContributionsApi::class.java)
+    }
 
-        binding.btnLogin.setOnClickListener{
-            getCredentials()
-            hideKeyboard(this)
-        }
+    override fun onStart() {
+        loginViewMvc.registerListener(this)
+        super.onStart()
     }
 
     override fun onStop() {
         super.onStop()
         coroutineScope.coroutineContext.cancelChildren()
+        loginViewMvc.unregisterListener(this)
     }
 
     private fun setCredentials(username: String, password: String) {
@@ -105,37 +107,18 @@ class LoginActivity : AppCompatActivity() {
             userLoginRequestModel.setEmail(username)
         if (Utils.isNumber(username) && username.length <= 5)
             userLoginRequestModel.setSapNo(username)
-        if(username.length == 30)
+        if (username.length == 30)
             userLoginRequestModel.setUserId(username)
 
         attemptLogin(userLoginRequestModel)
     }
 
-    private fun getCredentials() {
-
-        val username = binding.etUsername.text.toString()
-        val password = binding.etPassword.text.toString()
-
-        if (username.isEmpty() && password.isEmpty())
-            Toast.makeText(this, "Username and password are empty", Toast.LENGTH_LONG).show()
-        else {
-            if (username.isEmpty())
-                Toast.makeText(this, "Username is empty", Toast.LENGTH_LONG).show()
-
-            else if (password.isEmpty())
-                Toast.makeText(this, "Password is empty", Toast.LENGTH_LONG).show()
-
-            else if (username.isNotEmpty() && password.isNotEmpty())
-                setCredentials(username, password)
-        }
-    }
-
     private fun attemptLogin(userLoginRequestModel: UserLoginRequestModel) {
         coroutineScope.launch {
-            showProgressIndication(progressDialog)
+            showProgressIndication()
 
             try {
-                val response  = successContributionsApi.login(userLoginRequestModel)
+                val response = successContributionsApi.login(userLoginRequestModel)
                 if (response.isSuccessful) {
                     val headerList: Headers = response.headers()
                     onAttemptSuccess(headerList)
@@ -147,18 +130,27 @@ class LoginActivity : AppCompatActivity() {
                 if (e != CancellationException())
                     onAttemptFail()
             } finally {
-                hideProgressIndication(progressDialog)
+                hideProgressIndication()
             }
         }
     }
 
+
+    private fun showProgressIndication() {
+        loginViewMvc.showProgressIndication()
+    }
+
+    private fun hideProgressIndication() {
+        loginViewMvc.hideProgressIndication()
+    }
+
     private fun onAttemptSuccess(headerList: Headers) {
-        val authorization: String = headerList.get(AUTHORIZATION_HEADER_STRING)!!
-        val userId: String = headerList.get(USER_ID)!!
-        val loginRole: String = headerList.get(LOGIN_ROLE)!!
-        val balance: String = headerList.get(SAVINGS_BALANCE)!!
-        val firstName: String = headerList.get(FIRST_NAME)!!
-        val lastName: String = headerList.get(LAST_NAME)!!
+        val authorization: String = headerList[AUTHORIZATION_HEADER_STRING]!!
+        val userId: String = headerList[USER_ID]!!
+        val loginRole: String = headerList[LOGIN_ROLE]!!
+        val balance: String = headerList[SAVINGS_BALANCE]!!
+        val firstName: String = headerList[FIRST_NAME]!!
+        val lastName: String = headerList[LAST_NAME]!!
 
         preferences.edit().putString(AUTHORIZATION_TOKEN_DEFAULT_KEY, authorization).apply()
         preferences.edit().putString(USER_ID_DEFAULT_KEY, userId).apply()
@@ -166,10 +158,8 @@ class LoginActivity : AppCompatActivity() {
         preferences.edit().putString(FIRST_NAME_KEY, firstName).apply()
         preferences.edit().putString(LAST_NAME_KEY, lastName).apply()
 
-        Toast.makeText(this, "Login Success!", Toast.LENGTH_SHORT).show()
-
-        binding.etUsername.setText("")
-        binding.etPassword.setText("")
+        loginViewMvc.loginSuccess()
+        loginViewMvc.clearCredentials()
 
         val intent = Intent(this, DashBoardActivity::class.java)
         intent.putExtra(LOGIN_ROLE_KEY, loginRole)
@@ -184,32 +174,15 @@ class LoginActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    private fun showProgressIndication(progressDialog: ProgressDialog) {
-        progressDialog.setMessage("Authenticating please wait...");
-        progressDialog.show();
-    }
+    override fun submit() {
+        loginViewMvc.hideKeyboard(this)
+        loginViewMvc.getCredentials()
 
-    private fun hideProgressIndication(progressDialog: ProgressDialog) {
-        progressDialog.dismiss()
-    }
+        username = loginViewMvc.username
+        password = loginViewMvc.password
 
-    private fun hideOpeningKeyBoard(activity: Activity, editText: EditText) {
-        editText.inputType = InputType.TYPE_NULL
-        editText.setOnClickListener {
-            editText.inputType = InputType.TYPE_CLASS_TEXT
-            editText.requestFocus()
-            val imm: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
-        }
-    }
-
-    private fun hideKeyboard(activity: Activity) {
-        val imm: InputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = activity.currentFocus
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
+        if (username.isNotEmpty() && password.isNotEmpty())
+            setCredentials(username, password)
     }
 
 }
