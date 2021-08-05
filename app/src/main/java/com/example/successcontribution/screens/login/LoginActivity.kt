@@ -1,11 +1,8 @@
 package com.example.successcontribution.screens.login
 
-import android.app.ProgressDialog
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.example.successcontribution.databinding.ActivityLoginBinding
 import com.example.successcontribution.model.request.UserLoginRequestModel
 import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_HEADER_STRING
@@ -31,17 +28,9 @@ import com.example.successcontribution.screens.dashboard.DashBoardActivity
 import android.content.Intent
 import com.example.successcontribution.screens.common.dialogs.ServerErrorDialogFragment
 import com.example.successcontribution.shared.Constant.SAVINGS_BALANCE_KEY
-import android.app.Activity
-import android.content.Context
-import android.text.InputType
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import com.example.successcontribution.R
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
-import kotlin.math.log
 
 
 class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
@@ -175,7 +164,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
     }
 
     override fun submit() {
-        loginViewMvc.hideKeyboard(this)
+        loginViewMvc.hideKeyboard()
         loginViewMvc.getCredentials()
 
         username = loginViewMvc.username

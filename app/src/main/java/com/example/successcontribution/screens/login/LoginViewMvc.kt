@@ -1,10 +1,9 @@
 package com.example.successcontribution.screens.login
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.text.InputType
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -12,16 +11,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.successcontribution.R
 import com.example.successcontribution.databinding.ActivityLoginBinding
+import com.example.successcontribution.screens.common.viewmvc.BaseViewMvc
 
 class LoginViewMvc(
-    private val activity: AppCompatActivity,
-    private val parent: ViewGroup?
-) {
+    activity: AppCompatActivity,
+    parent: ViewGroup?
+): BaseViewMvc<LoginViewMvc.Listener>(activity) {
 
     private var binding: ActivityLoginBinding =
         ActivityLoginBinding.inflate(activity.layoutInflater, parent, false)
 
-    private val progressDialog: ProgressDialog = ProgressDialog(activity, R.style.MyAlertDialogStyle)
     val rootView = binding.root
     var username: String = ""
     var password: String = ""
@@ -30,18 +29,8 @@ class LoginViewMvc(
         fun submit()
     }
 
-    private val listeners = HashSet<Listener>()
-
-    fun registerListener(listener: Listener){
-       listeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
-    }
-
     init {
-        hideOpeningKeyBoard(activity, binding.etUsername)
+        hideOpeningKeyBoard(binding.etUsername)
 
         binding.btnLogin.setOnClickListener {
             for(listener in listeners){
@@ -65,15 +54,6 @@ class LoginViewMvc(
         }
     }
 
-    fun showProgressIndication() {
-        progressDialog.setMessage("Authenticating please wait...");
-        progressDialog.show();
-    }
-
-    fun hideProgressIndication() {
-        progressDialog.dismiss()
-    }
-
     fun clearCredentials() {
         binding.etUsername.setText("")
         binding.etPassword.setText("")
@@ -83,25 +63,16 @@ class LoginViewMvc(
         Toast.makeText(activity, "Login Success!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun hideOpeningKeyBoard(activity: Activity, editText: EditText) {
+    private fun hideOpeningKeyBoard(editText: EditText) {
         editText.inputType = InputType.TYPE_NULL
         editText.setOnClickListener {
             editText.inputType = InputType.TYPE_CLASS_TEXT
             editText.requestFocus()
-            val imm: InputMethodManager =
-                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
         }
     }
 
-    fun hideKeyboard(activity: Activity) {
-        val imm: InputMethodManager =
-            activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = activity.currentFocus
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
+
 
 }

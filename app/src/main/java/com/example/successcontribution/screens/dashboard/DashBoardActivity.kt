@@ -38,7 +38,7 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
         preferences = applicationContext.getSharedPreferences(Constant.MY_PREF, 0)
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
-            dashBoardViewMvc.checkUserSignIn(intent, preferences);
+            dashBoardViewMvc.checkUserSignIn(intent, preferences)
         }
 
     }

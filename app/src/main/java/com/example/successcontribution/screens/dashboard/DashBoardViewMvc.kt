@@ -2,6 +2,7 @@ package com.example.successcontribution.screens.dashboard
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -10,12 +11,13 @@ import com.example.successcontribution.databinding.ActivityDashBoardBinding
 import com.example.successcontribution.screens.login.LoginViewMvc
 import com.example.successcontribution.shared.Constant
 import androidx.core.content.ContextCompat.startActivity
+import com.example.successcontribution.screens.common.viewmvc.BaseViewMvc
 
 
 class DashBoardViewMvc(
-    private val activity: AppCompatActivity,
-    private val parent: ViewGroup?
-) {
+    activity: AppCompatActivity,
+    parent: ViewGroup?
+): BaseViewMvc<DashBoardViewMvc.Listener>(activity) {
 
     private val binding: ActivityDashBoardBinding = ActivityDashBoardBinding.inflate(activity.layoutInflater, parent, false)
     val rootView = binding.root
@@ -28,16 +30,6 @@ class DashBoardViewMvc(
         fun listUsers()
         fun guaranteeLoan()
         fun goToAdminPage()
-    }
-
-    private val listeners = HashSet<Listener>()
-
-    fun registerListener(listener: Listener){
-        listeners.add(listener)
-    }
-
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
     }
 
     fun hideUserRole() {
