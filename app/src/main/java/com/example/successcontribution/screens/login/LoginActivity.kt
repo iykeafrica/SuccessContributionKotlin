@@ -3,6 +3,7 @@ package com.example.successcontribution.screens.login
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.successcontribution.MyApplication
 import com.example.successcontribution.model.request.UserLoginRequestModel
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
@@ -38,7 +39,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         loginViewMvc = LoginViewMvc(this, null)
         setContentView(loginViewMvc.rootView)
 
-        attemptLoginUseCase = AttemptLoginUseCase()
+        attemptLoginUseCase = AttemptLoginUseCase((application as MyApplication).successContributionsApi)
         screensNavigator = ScreensNavigator(this)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
