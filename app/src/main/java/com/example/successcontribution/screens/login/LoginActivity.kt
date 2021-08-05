@@ -17,6 +17,7 @@ import okhttp3.Headers
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.screens.common.Pref
 import com.example.successcontribution.screens.common.ScreensNavigator
+import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.dialogs.ServerErrorDialogFragment
 
 
@@ -26,13 +27,10 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
 
     private lateinit var preferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-
     private lateinit var loginViewMvc: LoginViewMvc
-
     private lateinit var successContributionsApi: SuccessContributionsApi
-
     private lateinit var screensNavigator: ScreensNavigator
-
+    private lateinit var dialogsNavigator: DialogsNavigator
     private lateinit var username: String
     private lateinit var password: String
 
@@ -43,9 +41,8 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         setContentView(loginViewMvc.rootView)
 
         successContributionsApi = AttemptLoginUseCase().successContributionsApi()
-
         screensNavigator = ScreensNavigator(this)
-
+        dialogsNavigator = DialogsNavigator(supportFragmentManager)
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
         editor = preferences.edit()
     }
@@ -61,25 +58,13 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
             setCredentials(username, password)
     }
 
-    override fun onStart() {
-        loginViewMvc.registerListener(this)
-        super.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        coroutineScope.coroutineContext.cancelChildren()
-        loginViewMvc.unregisterListener(this)
-    }
-
     private fun setCredentials(username: String, password: String) {
-        val userLoginRequestModel = Credentials.signInCredentials(username, password)
-        attemptLogin(userLoginRequestModel)
+        attemptLogin(Credentials.signInCredentials(username, password))
     }
 
     private fun attemptLogin(userLoginRequestModel: UserLoginRequestModel) {
         coroutineScope.launch {
-            showProgressIndication()
+            loginViewMvc.showProgressIndication()
 
             try {
                 val response = successContributionsApi.login(userLoginRequestModel)
@@ -94,18 +79,9 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
                 if (e != CancellationException())
                     onAttemptFail()
             } finally {
-                hideProgressIndication()
+                loginViewMvc.hideProgressIndication()
             }
         }
-    }
-
-
-    private fun showProgressIndication() {
-        loginViewMvc.showProgressIndication()
-    }
-
-    private fun hideProgressIndication() {
-        loginViewMvc.hideProgressIndication()
     }
 
     private fun onAttemptSuccess(headerList: Headers) {
@@ -123,10 +99,18 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
     }
 
     private fun onAttemptFail() {
-        supportFragmentManager.beginTransaction()
-            .add(ServerErrorDialogFragment.newInstance(), null)
-            .commitAllowingStateLoss()
+        dialogsNavigator.showServerErrorDialog()
     }
 
+    override fun onStart() {
+        loginViewMvc.registerListener(this)
+        super.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineScope.coroutineContext.cancelChildren()
+        loginViewMvc.unregisterListener(this)
+    }
 
 }

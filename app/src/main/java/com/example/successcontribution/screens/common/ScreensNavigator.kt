@@ -17,4 +17,10 @@ class ScreensNavigator(val activity: Activity) {
     fun onNavigateBack() {
         activity.onBackPressed()
     }
+
+    fun onLogout() {
+
+    }
+
+
 }

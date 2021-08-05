@@ -13,6 +13,8 @@ import android.content.Intent
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
+import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 
 import com.example.successcontribution.screens.login.LoginActivity
 
@@ -21,27 +23,28 @@ private val TAG = DashBoardActivity::class.java.simpleName
 class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
 
     private lateinit var preferences: SharedPreferences
-
     private lateinit var dashBoardViewMvc: DashBoardViewMvc
+    private lateinit var dialogsNavigator: DialogsNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         dashBoardViewMvc = DashBoardViewMvc(this, null)
-
         setContentView(dashBoardViewMvc.rootView)
 
         preferences = applicationContext.getSharedPreferences(Constant.MY_PREF, 0)
 
+        dialogsNavigator = DialogsNavigator(supportFragmentManager)
+
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
             dashBoardViewMvc.checkUserSignIn(intent, preferences)
         }
-
     }
 
     override fun onResume() {
         super.onResume()
         dashBoardViewMvc.hideUserRole()
+
         dashBoardViewMvc.checkUserSignIn(intent, preferences)
     }
 
@@ -55,22 +58,8 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
         dashBoardViewMvc.unregisterListener(this)
     }
 
-
     override fun onBackPressed() {
-        val builder = AlertDialog.Builder(this)
-        builder.setCancelable(false)
-        builder.setMessage("Do you want to logout?")
-        builder.setPositiveButton("Yes") { _, _ ->
-            val intent = Intent(this@DashBoardActivity, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-            finish()
-        }
-        builder.setNegativeButton("No") { dialog, _ ->
-            dialog.cancel()
-        }
-        val alert: AlertDialog = builder.create()
-        alert.show()
+        dialogsNavigator.showBackPressed()
     }
 
     override fun checkLoanApplications() {

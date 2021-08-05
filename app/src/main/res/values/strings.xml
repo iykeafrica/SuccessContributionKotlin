@@ -54,7 +54,7 @@
 
     <string name="back_pressed_dialog_title">BACK PRESSED</string>
     <string name="back_pressed_dialog_message">Do you want to logout?</string>
-    <string name="back_pressed_dialog_button_yes">YES</string>
-    <string name="back_pressed_dialog_button_no">NO</string>
+    <string name="back_pressed_dialog_button_yes">Yes</string>
+    <string name="back_pressed_dialog_button_no">No</string>
 
 </resources>

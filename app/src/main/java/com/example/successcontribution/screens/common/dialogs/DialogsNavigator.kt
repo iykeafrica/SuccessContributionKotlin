@@ -9,4 +9,10 @@ class DialogsNavigator (private val fragmentManager: FragmentManager) {
             .add(ServerErrorDialogFragment.newInstance(), null)
             .commitAllowingStateLoss()
     }
+
+    fun showBackPressed() {
+        fragmentManager.beginTransaction()
+            .add(BackPressedDialogFragment.newInstance(), null)
+            .commitAllowingStateLoss()
+    }
 }
