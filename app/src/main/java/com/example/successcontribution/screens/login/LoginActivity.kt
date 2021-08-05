@@ -15,6 +15,7 @@ import kotlinx.coroutines.*
 import okhttp3.Headers
 
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
+import com.example.successcontribution.screens.common.Pref
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.ServerErrorDialogFragment
 
@@ -24,6 +25,8 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private lateinit var preferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     private lateinit var loginViewMvc: LoginViewMvc
 
     private lateinit var successContributionsApi: SuccessContributionsApi
@@ -44,6 +47,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         screensNavigator = ScreensNavigator(this)
 
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
+        editor = preferences.edit()
     }
 
     override fun submit() {
@@ -106,11 +110,11 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
 
     private fun onAttemptSuccess(headerList: Headers) {
 
-        preferences.edit().putString(AUTHORIZATION_TOKEN_DEFAULT_KEY, authorizationHeader(headerList)).apply()
-        preferences.edit().putString(USER_ID_DEFAULT_KEY, userId(headerList)).apply()
-        preferences.edit().putString(LOGIN_ROLE_KEY, loginRole(headerList)).apply()
-        preferences.edit().putString(FIRST_NAME_KEY, firstName(headerList)).apply()
-        preferences.edit().putString(LAST_NAME_KEY, lastName(headerList)).apply()
+        Pref.storeValue(editor, AUTHORIZATION_TOKEN_DEFAULT_KEY, authorizationHeader(headerList))
+        Pref.storeValue(editor, USER_ID_DEFAULT_KEY, userId(headerList))
+        Pref.storeValue(editor, LOGIN_ROLE_KEY, loginRole(headerList))
+        Pref.storeValue(editor, FIRST_NAME_KEY, firstName(headerList))
+        Pref.storeValue(editor, LAST_NAME_KEY, lastName(headerList))
 
         loginViewMvc.loginSuccess()
         loginViewMvc.clearCredentials()

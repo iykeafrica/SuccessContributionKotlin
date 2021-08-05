@@ -96,7 +96,7 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
     override fun goToAdminPage() {
         Log.d(TAG, "goToAdminPage: goToAdminPage")
     }
-    
+
     companion object {
         fun loadDashboard(context: Context, loginRole: String, balance: String, firstName: String) {
             val intent = Intent( context, DashBoardActivity::class.java)
