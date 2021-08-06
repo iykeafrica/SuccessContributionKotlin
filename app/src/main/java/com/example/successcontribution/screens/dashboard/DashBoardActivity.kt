@@ -17,6 +17,7 @@ import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
+import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 
 import com.example.successcontribution.screens.login.LoginActivity
 
@@ -31,7 +32,7 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dashBoardViewMvc = DashBoardViewMvc(this, null)
+        dashBoardViewMvc = compositionRoot.viewMvcFactory.newDashBoardViewMvcFactory(null)
         setContentView(dashBoardViewMvc.rootView)
 
         mySharedPreference = compositionRoot.mySharedPreference

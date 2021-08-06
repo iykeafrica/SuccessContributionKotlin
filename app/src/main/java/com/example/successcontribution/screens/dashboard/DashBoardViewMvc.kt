@@ -1,5 +1,6 @@
 package com.example.successcontribution.screens.dashboard
 
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import com.example.successcontribution.screens.common.viewmvc.BaseViewMvc
 
 
 class DashBoardViewMvc(
-    activity: AppCompatActivity,
+    activity: Activity,
     parent: ViewGroup?
 ): BaseViewMvc<DashBoardViewMvc.Listener>(activity) {
 

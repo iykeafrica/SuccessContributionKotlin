@@ -10,6 +10,7 @@ import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
+import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 
 class ActivityCompositionRoot(
     val activity: AppCompatActivity,
@@ -33,5 +34,7 @@ class ActivityCompositionRoot(
     private val successContributionsApi get() = appCompositionRoot.successContributionsApi
 
     val attemptLoginUseCase: AttemptLoginUseCase get() =  AttemptLoginUseCase(successContributionsApi)
+
+    val viewMvcFactory = ViewMvcFactory(activity)
 
 }

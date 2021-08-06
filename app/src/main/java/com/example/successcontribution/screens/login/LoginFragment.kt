@@ -40,7 +40,7 @@ class LoginFragment: BaseFragment(), LoginViewMvc.Listener{
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loginViewMvc = LoginViewMvc(requireActivity(), null)
+        loginViewMvc = compositionRoot.viewMvcFactory.newLoginViewMvcFactory(container)
         return loginViewMvc.rootView
     }
 
