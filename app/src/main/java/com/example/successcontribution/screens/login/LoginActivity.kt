@@ -39,9 +39,8 @@ class LoginActivity : BaseActivity(), LoginViewMvc.Listener {
 
         attemptLoginUseCase = compositionRoot.attemptLoginUseCase
         screensNavigator = compositionRoot.screensNavigator
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
-
-        mySharedPreference = myPreferences
+        dialogsNavigator = compositionRoot.dialogsNavigator
+        mySharedPreference = compositionRoot.mySharedPreference
     }
 
     override fun submit() {

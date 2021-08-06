@@ -8,7 +8,7 @@ import com.example.successcontribution.screens.common.preferences.MySharedPrefer
 
 open class BaseActivity: AppCompatActivity() {
     private val appCompositionRoot: AppCompositionRoot get() = (application as MyApplication).appCompositionRoot
-    val myPreferences: MySharedPreference get() = MySharedPreference(applicationContext)
+//    val myPreferences: MySharedPreference get() = MySharedPreference(applicationContext)
 
     val compositionRoot: ActivityCompositionRoot by lazy {
         ActivityCompositionRoot(this, appCompositionRoot)

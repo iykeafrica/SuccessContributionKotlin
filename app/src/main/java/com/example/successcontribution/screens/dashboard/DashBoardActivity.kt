@@ -34,9 +34,8 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
         dashBoardViewMvc = DashBoardViewMvc(this, null)
         setContentView(dashBoardViewMvc.rootView)
 
-        mySharedPreference = myPreferences
-
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
+        mySharedPreference = compositionRoot.mySharedPreference
+        dialogsNavigator = compositionRoot.dialogsNavigator
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
             dashBoardViewMvc.checkUserSignIn(intent, mySharedPreference.preference)

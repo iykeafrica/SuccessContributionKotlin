@@ -6,7 +6,6 @@ import com.example.successcontribution.shared.Constant
 class MySharedPreference(applicationContext: Context) {
 
     val preference = applicationContext.getSharedPreferences(Constant.MY_PREF, 0)!!
-
     val editor = preference.edit()!!
 
 }
