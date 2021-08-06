@@ -17,10 +17,11 @@ import okhttp3.Headers
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.screens.common.Pref
 import com.example.successcontribution.screens.common.ScreensNavigator
+import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 
 
-class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
+class LoginActivity : BaseActivity(), LoginViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
@@ -39,7 +40,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         loginViewMvc = LoginViewMvc(this, null)
         setContentView(loginViewMvc.rootView)
 
-        attemptLoginUseCase = (application as MyApplication).appCompositionRoot.attemptLoginUseCase
+        attemptLoginUseCase = compositionRoot.attemptLoginUseCase
         screensNavigator = ScreensNavigator(this)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
