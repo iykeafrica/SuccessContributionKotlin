@@ -15,24 +15,21 @@ import com.example.successcontribution.shared.Constant
 import kotlinx.coroutines.*
 import okhttp3.Headers
 
-class LoginFragment: BaseFragment(), LoginViewMvc.Listener{
+class LoginFragment : BaseFragment(), LoginViewMvc.Listener {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private lateinit var mySharedPreference: MySharedPreference
     private lateinit var loginViewMvc: LoginViewMvc
-    private lateinit var attemptLoginUseCase: AttemptLoginUseCase
-    private lateinit var screensNavigator: ScreensNavigator
-    private lateinit var dialogsNavigator: DialogsNavigator
+    lateinit var mySharedPreference: MySharedPreference
+    lateinit var attemptLoginUseCase: AttemptLoginUseCase
+    lateinit var screensNavigator: ScreensNavigator
+    lateinit var dialogsNavigator: DialogsNavigator
     private lateinit var username: String
     private lateinit var password: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        attemptLoginUseCase = compositionRoot.attemptLoginUseCase
-        screensNavigator = compositionRoot.screensNavigator
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        mySharedPreference = compositionRoot.mySharedPreference
+        injector.inject(this)
     }
 
     override fun onCreateView(
@@ -80,7 +77,11 @@ class LoginFragment: BaseFragment(), LoginViewMvc.Listener{
 
     private fun onAttemptSuccess(headerList: Headers) {
         val editor = mySharedPreference.editor
-        Pref.storeValue(editor, Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY, authorizationHeader(headerList))
+        Pref.storeValue(
+            editor,
+            Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY,
+            authorizationHeader(headerList)
+        )
         Pref.storeValue(editor, Constant.USER_ID_DEFAULT_KEY, userId(headerList))
         Pref.storeValue(editor, Constant.LOGIN_ROLE_KEY, loginRole(headerList))
         Pref.storeValue(editor, Constant.FIRST_NAME_KEY, firstName(headerList))
@@ -89,7 +90,11 @@ class LoginFragment: BaseFragment(), LoginViewMvc.Listener{
         loginViewMvc.loginSuccess()
         loginViewMvc.clearCredentials()
 
-        screensNavigator.loginToDashBoard(loginRole(headerList), balance(headerList), firstName(headerList))
+        screensNavigator.loginToDashBoard(
+            loginRole(headerList),
+            balance(headerList),
+            firstName(headerList)
+        )
     }
 
     private fun onAttemptFail() {

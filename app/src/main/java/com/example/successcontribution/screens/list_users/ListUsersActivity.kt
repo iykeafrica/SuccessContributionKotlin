@@ -20,7 +20,7 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
     private val coroutineScope: CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    lateinit var listUsersViewMvc: ListUsersViewMvc
+    private lateinit var listUsersViewMvc: ListUsersViewMvc
     lateinit var fetchUsersUseCase: FetchUsersUseCase
     lateinit var mySharedPreference: MySharedPreference
     lateinit var dialogsNavigator: DialogsNavigator
@@ -31,13 +31,9 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        injector.inject(this)
         listUsersViewMvc = compositionRoot.viewMvcFactory.newListUsersViewMvcFactory(null)
         setContentView(listUsersViewMvc.rootView)
-
-        fetchUsersUseCase = compositionRoot.fetchUsersUseCase
-        mySharedPreference = compositionRoot.mySharedPreference
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        screensNavigator = compositionRoot.screensNavigator
     }
 
     override fun swipeRefreshClicked() {

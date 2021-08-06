@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.successcontribution.MyApplication
 import com.example.successcontribution.common.dependencyInjection.ActivityCompositionRoot
 import com.example.successcontribution.common.dependencyInjection.AppCompositionRoot
+import com.example.successcontribution.common.dependencyInjection.Injector
 import com.example.successcontribution.common.dependencyInjection.PresentationCompositionRoot
 
 open class BaseActivity : AppCompatActivity() {
@@ -17,4 +18,6 @@ open class BaseActivity : AppCompatActivity() {
     protected val compositionRoot: PresentationCompositionRoot by lazy {
         PresentationCompositionRoot(activityCompositionRoot)
     }
+
+    protected val injector get() = Injector(compositionRoot)
 }

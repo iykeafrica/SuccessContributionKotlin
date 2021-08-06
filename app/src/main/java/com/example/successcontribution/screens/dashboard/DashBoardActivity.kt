@@ -27,20 +27,17 @@ private val TAG = DashBoardActivity::class.java.simpleName
 
 class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
-    private lateinit var mySharedPreference: MySharedPreference
     private lateinit var dashBoardViewMvc: DashBoardViewMvc
-    private lateinit var dialogsNavigator: DialogsNavigator
-    private lateinit var screensNavigator: ScreensNavigator
+    lateinit var mySharedPreference: MySharedPreference
+    lateinit var dialogsNavigator: DialogsNavigator
+    lateinit var screensNavigator: ScreensNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        injector.inject(this)
         dashBoardViewMvc = compositionRoot.viewMvcFactory.newDashBoardViewMvcFactory(null)
         setContentView(dashBoardViewMvc.rootView)
-
-        mySharedPreference = compositionRoot.mySharedPreference
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        screensNavigator = compositionRoot.screensNavigator
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
             dashBoardViewMvc.checkUserSignIn(intent, mySharedPreference.preference)
