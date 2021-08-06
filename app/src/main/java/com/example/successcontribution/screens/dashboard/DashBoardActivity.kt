@@ -68,7 +68,8 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
     override fun checkLoanApplications() {
         Log.d(TAG, "checkLoanApplications: checkLoanApplications")
-        val name = mySharedPreference.preference.getString(Constant.LAST_NAME_KEY, "")
+
+        val name = mySharedPreference.getStoredString(Constant.LAST_NAME_KEY, "")
         Log.d(TAG, "checkLoanApplications: $name")
     }
 

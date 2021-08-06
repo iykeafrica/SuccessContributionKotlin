@@ -1,7 +1,5 @@
 package com.example.successcontribution.screens.list_users
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.example.successcontribution.common.dependencyInjection.Service
@@ -11,8 +9,6 @@ import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
-import com.example.successcontribution.screens.common.preferences.Pref
-import com.example.successcontribution.screens.dashboard.DashBoardActivity
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import kotlinx.coroutines.*
 
@@ -43,8 +39,7 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
     }
 
     private fun fetchUsers() {
-        val pref = mySharedPreference.preference
-        val authorization = Pref.getStoredString(pref, AUTHORIZATION_TOKEN_DEFAULT_KEY, "")
+        val authorization = mySharedPreference.getStoredString(AUTHORIZATION_TOKEN_DEFAULT_KEY, "")
 
         coroutineScope.launch {
                 listUsersViewMvc.showProgressIndication()

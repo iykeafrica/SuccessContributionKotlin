@@ -11,8 +11,11 @@ import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.fragment.BaseFragment
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
-import com.example.successcontribution.screens.common.preferences.Pref
-import com.example.successcontribution.shared.Constant
+import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
+import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
+import com.example.successcontribution.shared.Constant.LAST_NAME_KEY
+import com.example.successcontribution.shared.Constant.LOGIN_ROLE_KEY
+import com.example.successcontribution.shared.Constant.USER_ID_DEFAULT_KEY
 import kotlinx.coroutines.*
 import okhttp3.Headers
 
@@ -79,25 +82,16 @@ class LoginFragment : BaseFragment(), LoginViewMvc.Listener {
     }
 
     private fun onAttemptSuccess(headerList: Headers) {
-        val editor = mySharedPreference.editor
-        Pref.storeValue(
-            editor,
-            Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY,
-            authorizationHeader(headerList)
-        )
-        Pref.storeValue(editor, Constant.USER_ID_DEFAULT_KEY, userId(headerList))
-        Pref.storeValue(editor, Constant.LOGIN_ROLE_KEY, loginRole(headerList))
-        Pref.storeValue(editor, Constant.FIRST_NAME_KEY, firstName(headerList))
-        Pref.storeValue(editor, Constant.LAST_NAME_KEY, lastName(headerList))
+        mySharedPreference.storeValue(AUTHORIZATION_TOKEN_DEFAULT_KEY, authorizationHeader(headerList))
+        mySharedPreference.storeValue(USER_ID_DEFAULT_KEY, userId(headerList))
+        mySharedPreference.storeValue(LOGIN_ROLE_KEY, loginRole(headerList))
+        mySharedPreference.storeValue(FIRST_NAME_KEY, firstName(headerList))
+        mySharedPreference.storeValue(LAST_NAME_KEY, lastName(headerList))
 
         loginViewMvc.loginSuccess()
         loginViewMvc.clearCredentials()
 
-        screensNavigator.loginToDashBoard(
-            loginRole(headerList),
-            balance(headerList),
-            firstName(headerList)
-        )
+        screensNavigator.loginToDashBoard(loginRole(headerList), balance(headerList), firstName(headerList))
     }
 
     private fun onAttemptFail() {
