@@ -1,13 +1,12 @@
 package com.example.successcontribution.networking
 
+import com.example.successcontribution.common.composition.PresentationCompositionRoot
 import com.example.successcontribution.model.request.UserLoginRequestModel
 import com.example.successcontribution.model.response.UserRest
+import com.example.successcontribution.shared.Constant.AUTHORIZATION_HEADER_STRING
 import okhttp3.ResponseBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface SuccessContributionsApi {
 
@@ -15,5 +14,8 @@ interface SuccessContributionsApi {
     suspend fun login(@Body loginRequestModel: UserLoginRequestModel): Response<ResponseBody>
 
     @GET("/success-contributions/users")
-    suspend fun getUsers(@Query("page") page: Int, @Query("limit") limit: Int) : Response<List<UserRest>>
+    suspend fun getUsers(
+        @Header(AUTHORIZATION_HEADER_STRING) authorization: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int) : Response<List<UserRest>>
 }

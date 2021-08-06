@@ -29,5 +29,5 @@ class PresentationCompositionRoot(
 
     val attemptLoginUseCase: AttemptLoginUseCase get() =  AttemptLoginUseCase(successContributionsApi)
 
-    val viewMvcFactory = ViewMvcFactory(activity)
+    val viewMvcFactory get() = ViewMvcFactory(activity)
 }
