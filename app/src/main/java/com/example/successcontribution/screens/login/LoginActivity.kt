@@ -1,32 +1,29 @@
 package com.example.successcontribution.screens.login
 
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.successcontribution.MyApplication
 import com.example.successcontribution.model.request.UserLoginRequestModel
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
 import com.example.successcontribution.shared.Constant.LAST_NAME_KEY
 import com.example.successcontribution.shared.Constant.LOGIN_ROLE_KEY
-import com.example.successcontribution.shared.Constant.MY_PREF
 import com.example.successcontribution.shared.Constant.USER_ID_DEFAULT_KEY
 import kotlinx.coroutines.*
 import okhttp3.Headers
 
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
-import com.example.successcontribution.screens.common.Pref
+import com.example.successcontribution.screens.common.preferences.Pref
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
+import com.example.successcontribution.screens.common.preferences.MySharedPreference
 
 
 class LoginActivity : BaseActivity(), LoginViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    private lateinit var preferences: SharedPreferences
-    private lateinit var editor: SharedPreferences.Editor
+    private lateinit var mySharedPreference: MySharedPreference
     private lateinit var loginViewMvc: LoginViewMvc
     private lateinit var attemptLoginUseCase: AttemptLoginUseCase
     private lateinit var screensNavigator: ScreensNavigator
@@ -41,10 +38,10 @@ class LoginActivity : BaseActivity(), LoginViewMvc.Listener {
         setContentView(loginViewMvc.rootView)
 
         attemptLoginUseCase = compositionRoot.attemptLoginUseCase
-        screensNavigator = ScreensNavigator(this)
+        screensNavigator = compositionRoot.screensNavigator
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
-        preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
-        editor = preferences.edit()
+
+        mySharedPreference = myPreferences
     }
 
     override fun submit() {
@@ -82,7 +79,7 @@ class LoginActivity : BaseActivity(), LoginViewMvc.Listener {
     }
 
     private fun onAttemptSuccess(headerList: Headers) {
-
+        val editor = mySharedPreference.editor
         Pref.storeValue(editor, AUTHORIZATION_TOKEN_DEFAULT_KEY, authorizationHeader(headerList))
         Pref.storeValue(editor, USER_ID_DEFAULT_KEY, userId(headerList))
         Pref.storeValue(editor, LOGIN_ROLE_KEY, loginRole(headerList))

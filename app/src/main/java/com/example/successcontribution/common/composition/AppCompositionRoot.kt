@@ -1,7 +1,9 @@
 package com.example.successcontribution.common.composition
 
+import com.example.successcontribution.MyApplication
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.networking.SuccessContributionsApi
+import com.example.successcontribution.screens.common.preferences.MySharedPreference
 import com.example.successcontribution.shared.Constant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,13 +31,10 @@ class AppCompositionRoot {
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
     }
 
-    private val successContributionsApi: SuccessContributionsApi by lazy {
+    val successContributionsApi: SuccessContributionsApi by lazy {
         retrofit.create(SuccessContributionsApi::class.java)
     }
-
-    val attemptLoginUseCase: AttemptLoginUseCase = AttemptLoginUseCase(successContributionsApi)
 
 }

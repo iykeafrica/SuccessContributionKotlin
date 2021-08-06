@@ -13,16 +13,18 @@ import android.content.Intent
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
+import com.example.successcontribution.screens.common.preferences.MySharedPreference
 
 import com.example.successcontribution.screens.login.LoginActivity
 
 private val TAG = DashBoardActivity::class.java.simpleName
 
-class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
+class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
-    private lateinit var preferences: SharedPreferences
+    private lateinit var mySharedPreference: MySharedPreference
     private lateinit var dashBoardViewMvc: DashBoardViewMvc
     private lateinit var dialogsNavigator: DialogsNavigator
 
@@ -32,20 +34,19 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
         dashBoardViewMvc = DashBoardViewMvc(this, null)
         setContentView(dashBoardViewMvc.rootView)
 
-        preferences = applicationContext.getSharedPreferences(Constant.MY_PREF, 0)
+        mySharedPreference = myPreferences
 
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
-            dashBoardViewMvc.checkUserSignIn(intent, preferences)
+            dashBoardViewMvc.checkUserSignIn(intent, mySharedPreference.preference)
         }
     }
 
     override fun onResume() {
         super.onResume()
         dashBoardViewMvc.hideUserRole()
-
-        dashBoardViewMvc.checkUserSignIn(intent, preferences)
+        dashBoardViewMvc.checkUserSignIn(intent, mySharedPreference.preference)
     }
 
     override fun onStart() {
@@ -64,6 +65,8 @@ class DashBoardActivity : AppCompatActivity(), DashBoardViewMvc.Listener {
 
     override fun checkLoanApplications() {
         Log.d(TAG, "checkLoanApplications: checkLoanApplications")
+        val name = mySharedPreference.preference.getString(Constant.LAST_NAME_KEY, "")
+        Log.d(TAG, "checkLoanApplications: $name")
     }
 
     override fun requestLoan() {

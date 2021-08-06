@@ -1,4 +1,4 @@
-package com.example.successcontribution.screens.common
+package com.example.successcontribution.screens.common.preferences
 
 import android.content.SharedPreferences
 
