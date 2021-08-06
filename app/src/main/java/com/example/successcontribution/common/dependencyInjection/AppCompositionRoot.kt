@@ -1,9 +1,7 @@
-package com.example.successcontribution.common.composition
+package com.example.successcontribution.common.dependencyInjection
 
 import android.app.Application
 import androidx.annotation.UiThread
-import com.example.successcontribution.MyApplication
-import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
 import com.example.successcontribution.shared.Constant

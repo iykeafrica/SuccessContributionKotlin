@@ -1,11 +1,10 @@
-package com.example.successcontribution.common.composition
+package com.example.successcontribution.common.dependencyInjection
 
 import androidx.fragment.app.FragmentManager
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.network_usecase.FetchUsersUseCase
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
-import com.example.successcontribution.screens.common.preferences.MySharedPreference
 import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 
 class PresentationCompositionRoot(
