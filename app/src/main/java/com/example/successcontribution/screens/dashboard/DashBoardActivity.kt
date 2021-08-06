@@ -13,11 +13,13 @@ import android.content.Intent
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
 import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
+import com.example.successcontribution.screens.list_users.ListUsersActivity
 
 import com.example.successcontribution.screens.login.LoginActivity
 
@@ -28,6 +30,7 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
     private lateinit var mySharedPreference: MySharedPreference
     private lateinit var dashBoardViewMvc: DashBoardViewMvc
     private lateinit var dialogsNavigator: DialogsNavigator
+    private lateinit var screensNavigator: ScreensNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,7 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
         mySharedPreference = compositionRoot.mySharedPreference
         dialogsNavigator = compositionRoot.dialogsNavigator
+        screensNavigator = compositionRoot.screensNavigator
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {
             dashBoardViewMvc.checkUserSignIn(intent, mySharedPreference.preference)
@@ -78,7 +82,7 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
     }
 
     override fun listUsers() {
-        Log.d(TAG, "listUsers: listUsers")
+        screensNavigator.navigateToListUsers()
     }
 
     override fun guaranteeLoan() {
@@ -91,7 +95,7 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
     companion object {
         fun loadDashboard(context: Context, loginRole: String, balance: String, firstName: String) {
-            val intent = Intent( context, DashBoardActivity::class.java)
+            val intent = Intent(context, DashBoardActivity::class.java)
             intent.putExtra(LOGIN_ROLE_KEY, loginRole)
             intent.putExtra(Constant.SAVINGS_BALANCE_KEY, balance)
             intent.putExtra(FIRST_NAME_KEY, firstName)

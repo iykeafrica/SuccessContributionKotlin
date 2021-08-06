@@ -2,8 +2,11 @@ package com.example.successcontribution.screens.common.viewmvc
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
+import android.text.InputType
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.successcontribution.R
 
@@ -40,5 +43,16 @@ open class BaseViewMvc<LISTENER>(
     fun hideProgressIndication() {
         progressDialog.dismiss()
     }
+
+    fun hideOpeningKeyBoard(editText: EditText) {
+        editText.inputType = InputType.TYPE_NULL
+        editText.setOnClickListener {
+            editText.inputType = InputType.TYPE_CLASS_TEXT
+            editText.requestFocus()
+            val imm: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
+        }
+    }
+
 
 }

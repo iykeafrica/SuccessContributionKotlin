@@ -68,14 +68,4 @@ class LoginViewMvc(
         Toast.makeText(activity, "Login Success!", Toast.LENGTH_SHORT).show()
     }
 
-    private fun hideOpeningKeyBoard(editText: EditText) {
-        editText.inputType = InputType.TYPE_NULL
-        editText.setOnClickListener {
-            editText.inputType = InputType.TYPE_CLASS_TEXT
-            editText.requestFocus()
-            val imm: InputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
-        }
-    }
-
 }

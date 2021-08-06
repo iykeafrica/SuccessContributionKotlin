@@ -78,7 +78,7 @@ class DashBoardViewMvc(
     }
 
     private fun listUsers() {
-        binding.profile.setOnClickListener{
+        binding.contributors.setOnClickListener{
             for (listener in listeners) {
                 listener.listUsers()
             }
