@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.screens.common.ScreensNavigator
@@ -25,7 +26,9 @@ class ActivityCompositionRoot(
         MySharedPreference(applicationContext)
     }
 
-    val dialogsNavigator: DialogsNavigator get() = DialogsNavigator(activity.supportFragmentManager)
+    private val fragmentManager: FragmentManager get() = activity.supportFragmentManager
+
+    val dialogsNavigator: DialogsNavigator get() = DialogsNavigator(fragmentManager)
 
     private val successContributionsApi get() = appCompositionRoot.successContributionsApi
 

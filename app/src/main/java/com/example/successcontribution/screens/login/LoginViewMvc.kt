@@ -1,5 +1,6 @@
 package com.example.successcontribution.screens.login
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.text.InputType
@@ -11,15 +12,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.successcontribution.R
 import com.example.successcontribution.databinding.ActivityLoginBinding
+import com.example.successcontribution.databinding.FragmentLoginBinding
 import com.example.successcontribution.screens.common.viewmvc.BaseViewMvc
 
 class LoginViewMvc(
-    activity: AppCompatActivity,
+    activity: Activity,
     parent: ViewGroup?
 ): BaseViewMvc<LoginViewMvc.Listener>(activity) {
 
-    private var binding: ActivityLoginBinding =
-        ActivityLoginBinding.inflate(activity.layoutInflater, parent, false)
+    private var binding: FragmentLoginBinding =
+        FragmentLoginBinding.inflate(activity.layoutInflater, parent, false)
+
+//    private var binding: ActivityLoginBinding =
+//        ActivityLoginBinding.inflate(activity.layoutInflater, parent, false)
 
     val rootView = binding.root
     var username: String = ""
@@ -72,7 +77,5 @@ class LoginViewMvc(
             imm.showSoftInput(editText, InputMethodManager.SHOW_FORCED)
         }
     }
-
-
 
 }

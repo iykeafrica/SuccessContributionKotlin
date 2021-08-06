@@ -1,5 +1,6 @@
 package com.example.successcontribution.screens.common.viewmvc
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -7,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.successcontribution.R
 
 open class BaseViewMvc<LISTENER>(
-    val activity: AppCompatActivity
+    val activity: Activity
 ){
     private var progressDialog: ProgressDialog = ProgressDialog(activity, R.style.MyAlertDialogStyle)
 
