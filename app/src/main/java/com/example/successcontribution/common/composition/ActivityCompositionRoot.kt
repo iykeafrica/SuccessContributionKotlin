@@ -2,6 +2,7 @@ package com.example.successcontribution.common.composition
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -21,20 +22,14 @@ class ActivityCompositionRoot(
         ScreensNavigator(activity)
     }
 
-    private val applicationContext = activity.applicationContext
+    val applicationContext: Context = activity.applicationContext
 
     val mySharedPreference by lazy {
         MySharedPreference(applicationContext)
     }
 
-    private val fragmentManager: FragmentManager get() = activity.supportFragmentManager
+    val fragmentManager: FragmentManager get() = activity.supportFragmentManager
 
-    val dialogsNavigator: DialogsNavigator get() = DialogsNavigator(fragmentManager)
-
-    private val successContributionsApi get() = appCompositionRoot.successContributionsApi
-
-    val attemptLoginUseCase: AttemptLoginUseCase get() =  AttemptLoginUseCase(successContributionsApi)
-
-    val viewMvcFactory = ViewMvcFactory(activity)
+    val successContributionsApi get() = appCompositionRoot.successContributionsApi
 
 }
