@@ -13,6 +13,7 @@ import android.content.Intent
 import android.content.DialogInterface
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.successcontribution.common.dependencyInjection.Service
 import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.BackPressedDialogFragment
@@ -28,9 +29,10 @@ private val TAG = DashBoardActivity::class.java.simpleName
 class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
 
     private lateinit var dashBoardViewMvc: DashBoardViewMvc
-    lateinit var mySharedPreference: MySharedPreference
-    lateinit var dialogsNavigator: DialogsNavigator
-    lateinit var screensNavigator: ScreensNavigator
+
+    @field:Service private lateinit var mySharedPreference: MySharedPreference
+    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service private lateinit var screensNavigator: ScreensNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

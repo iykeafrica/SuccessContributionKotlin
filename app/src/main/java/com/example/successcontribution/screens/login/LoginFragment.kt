@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.successcontribution.common.dependencyInjection.Service
 import com.example.successcontribution.model.request.UserLoginRequestModel
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.screens.common.ScreensNavigator
@@ -19,10 +20,12 @@ class LoginFragment : BaseFragment(), LoginViewMvc.Listener {
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private lateinit var loginViewMvc: LoginViewMvc
-    lateinit var mySharedPreference: MySharedPreference
-    lateinit var attemptLoginUseCase: AttemptLoginUseCase
-    lateinit var screensNavigator: ScreensNavigator
-    lateinit var dialogsNavigator: DialogsNavigator
+
+    @field:Service private lateinit var mySharedPreference: MySharedPreference
+    @field:Service private lateinit var attemptLoginUseCase: AttemptLoginUseCase
+    @field:Service private lateinit var screensNavigator: ScreensNavigator
+    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+
     private lateinit var username: String
     private lateinit var password: String
 

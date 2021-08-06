@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.example.successcontribution.common.dependencyInjection.Service
 import com.example.successcontribution.model.response.UserRest
 import com.example.successcontribution.network_usecase.FetchUsersUseCase
 import com.example.successcontribution.screens.common.ScreensNavigator
@@ -21,12 +22,13 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     private lateinit var listUsersViewMvc: ListUsersViewMvc
-    lateinit var fetchUsersUseCase: FetchUsersUseCase
-    lateinit var mySharedPreference: MySharedPreference
-    lateinit var dialogsNavigator: DialogsNavigator
-    lateinit var screensNavigator: ScreensNavigator
-    private var isDataLoaded = false
 
+    @field:Service private lateinit var fetchUsersUseCase: FetchUsersUseCase
+    @field:Service private lateinit var mySharedPreference: MySharedPreference
+    @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service private lateinit var screensNavigator: ScreensNavigator
+
+    private var isDataLoaded = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
