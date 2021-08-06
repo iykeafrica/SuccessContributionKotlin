@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity(), LoginViewMvc.Listener {
         loginViewMvc = LoginViewMvc(this, null)
         setContentView(loginViewMvc.rootView)
 
-        attemptLoginUseCase = (application as MyApplication).attemptLoginUseCase
+        attemptLoginUseCase = (application as MyApplication).appCompositionRoot.attemptLoginUseCase
         screensNavigator = ScreensNavigator(this)
         dialogsNavigator = DialogsNavigator(supportFragmentManager)
         preferences = applicationContext.getSharedPreferences(MY_PREF, 0)
