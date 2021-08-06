@@ -1,5 +1,6 @@
 package com.example.successcontribution.common.composition
 
+import androidx.annotation.UiThread
 import com.example.successcontribution.MyApplication
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.networking.SuccessContributionsApi
@@ -11,6 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+@UiThread
 class AppCompositionRoot {
     private val loggingInterceptor = run {
         val httpLoggingInterceptor = HttpLoggingInterceptor()

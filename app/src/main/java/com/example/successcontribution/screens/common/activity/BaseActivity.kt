@@ -7,15 +7,15 @@ import com.example.successcontribution.common.composition.AppCompositionRoot
 import com.example.successcontribution.common.composition.PresentationCompositionRoot
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
 
-open class BaseActivity: AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
     private val appCompositionRoot: AppCompositionRoot get() = (application as MyApplication).appCompositionRoot
-//    val myPreferences: MySharedPreference get() = MySharedPreference(applicationContext)
 
-   private val activityCompositionRoot: ActivityCompositionRoot by lazy {
+    //    val myPreferences: MySharedPreference get() = MySharedPreference(applicationContext)
+    val activityCompositionRoot: ActivityCompositionRoot by lazy {
         ActivityCompositionRoot(this, appCompositionRoot)
     }
 
-    val compositionRoot: PresentationCompositionRoot by lazy {
+    protected val compositionRoot: PresentationCompositionRoot by lazy {
         PresentationCompositionRoot(activityCompositionRoot)
     }
 }

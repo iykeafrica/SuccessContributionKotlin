@@ -6,5 +6,7 @@ import com.example.successcontribution.screens.common.activity.BaseActivity
 
 
 open class BaseFragment: Fragment() {
-    protected val compositionRoot: PresentationCompositionRoot get() = (requireActivity() as BaseActivity).compositionRoot
+    protected val compositionRoot: PresentationCompositionRoot by lazy {
+        PresentationCompositionRoot((requireActivity() as BaseActivity).activityCompositionRoot)
+    }
 }
