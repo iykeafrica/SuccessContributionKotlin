@@ -13,6 +13,8 @@ class PresentationCompositionRoot(
 
     private val activity get() = activityCompositionRoot.activity
 
+    private val application get() = activityCompositionRoot.application
+
     private val applicationContext = activityCompositionRoot.applicationContext
 
     private val successContributionsApi get() = activityCompositionRoot.successContributionsApi

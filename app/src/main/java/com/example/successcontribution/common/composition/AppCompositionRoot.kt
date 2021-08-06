@@ -1,5 +1,6 @@
 package com.example.successcontribution.common.composition
 
+import android.app.Application
 import androidx.annotation.UiThread
 import com.example.successcontribution.MyApplication
 import com.example.successcontribution.network_usecase.AttemptLoginUseCase
@@ -13,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @UiThread
-class AppCompositionRoot {
+class AppCompositionRoot(val application: Application) {
     private val loggingInterceptor = run {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.apply {
@@ -37,6 +38,10 @@ class AppCompositionRoot {
 
     val successContributionsApi: SuccessContributionsApi by lazy {
         retrofit.create(SuccessContributionsApi::class.java)
+    }
+
+    val mySharedPreference by lazy {
+        MySharedPreference(application.applicationContext)
     }
 
 }

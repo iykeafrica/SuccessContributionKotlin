@@ -16,7 +16,7 @@ class MyApplication : Application() {
     lateinit var appCompositionRoot: AppCompositionRoot
 
     override fun onCreate() {
-        appCompositionRoot = AppCompositionRoot()
+        appCompositionRoot = AppCompositionRoot(this)
         super.onCreate()
     }
 }

@@ -22,11 +22,11 @@ class ActivityCompositionRoot(
         ScreensNavigator(activity)
     }
 
-    val applicationContext: Context = activity.applicationContext
+    val application: Application = appCompositionRoot.application
 
-    val mySharedPreference by lazy {
-        MySharedPreference(applicationContext)
-    }
+    val applicationContext: Context = application.applicationContext
+
+    val mySharedPreference get() = appCompositionRoot.mySharedPreference
 
     val fragmentManager: FragmentManager get() = activity.supportFragmentManager
 
