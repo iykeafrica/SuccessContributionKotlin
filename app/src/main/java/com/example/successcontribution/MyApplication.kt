@@ -1,6 +1,7 @@
 package com.example.successcontribution
 
 import android.app.Application
+import com.example.successcontribution.network_usecase.AttemptLoginUseCase
 import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.shared.Constant
 import okhttp3.OkHttpClient
@@ -21,9 +22,9 @@ class MyApplication : Application() {
 
     private val httpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
         .build()
 
     private val retrofit = Retrofit.Builder()
@@ -33,6 +34,8 @@ class MyApplication : Application() {
         .build()
 
     val successContributionsApi: SuccessContributionsApi = retrofit.create(SuccessContributionsApi::class.java)
+
+    val attemptLoginUseCase: AttemptLoginUseCase = AttemptLoginUseCase(successContributionsApi)
 
     override fun onCreate() {
         super.onCreate()
