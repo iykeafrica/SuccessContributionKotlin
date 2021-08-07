@@ -7,13 +7,15 @@ import com.example.successcontribution.common.dependencyInjection.*
 open class BaseActivity : AppCompatActivity() {
     private val appCompositionRoot: AppCompositionRoot get() = (application as MyApplication).appCompositionRoot
 
-    val activityCompositionRoot: ActivityCompositionRoot by lazy {
-        ActivityCompositionRoot(this, appCompositionRoot)
+    val activityComponent: ActivityComponent by lazy {
+        DaggerActivityComponent.builder()
+            .activityModule(ActivityModule(this, appCompositionRoot))
+            .build()
     }
 
     private val presentationComponent by lazy {
         DaggerPresentationComponent.builder()
-            .presentationModule(PresentationModule(activityCompositionRoot))
+            .presentationModule(PresentationModule(activityComponent))
             .build()
     }
 

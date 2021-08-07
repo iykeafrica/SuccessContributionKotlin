@@ -12,30 +12,32 @@ import dagger.Provides
 
 @Module
 class PresentationModule(
-    private val activityCompositionRoot: ActivityCompositionRoot
+    private val activityComponent: ActivityComponent
 ) {
 
     @Provides
-    fun activity() = activityCompositionRoot.activity
+    fun appCompactActivity() = activityComponent.appCompactActivity()
 
     @Provides
-    fun application() = activityCompositionRoot.application
+    fun activity() = activityComponent.activity()
 
     @Provides
-    fun applicationContext() = activityCompositionRoot.applicationContext
+    fun application() = activityComponent.application()
 
     @Provides
-    fun successContributionsApi() = activityCompositionRoot.successContributionsApi
+    fun applicationContext() = activityComponent.applicationContext()
 
     @Provides
-    fun fragmentManager() = activityCompositionRoot.fragmentManager
-
-
-    @Provides
-    fun mySharedPreference() = activityCompositionRoot.mySharedPreference
+    fun successContributionsApi() = activityComponent.successContributionsApi()
 
     @Provides
-    fun screensNavigator() = activityCompositionRoot.screensNavigator
+    fun fragmentManager() = activityComponent.fragmentManager()
+
+    @Provides
+    fun mySharedPreference() = activityComponent.mySharedPreference()
+
+    @Provides
+    fun screensNavigator() = activityComponent.screensNavigator()
 
     @Provides
     fun dialogsNavigator(fragmentManager: FragmentManager) = DialogsNavigator(fragmentManager)
