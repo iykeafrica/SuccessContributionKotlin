@@ -9,6 +9,7 @@ import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.activity.BaseActivity
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
+import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import kotlinx.coroutines.*
 
@@ -23,6 +24,7 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
     @field:Service private lateinit var mySharedPreference: MySharedPreference
     @field:Service private lateinit var dialogsNavigator: DialogsNavigator
     @field:Service private lateinit var screensNavigator: ScreensNavigator
+    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
 
     private var isDataLoaded = false
 
@@ -30,7 +32,7 @@ class ListUsersActivity : BaseActivity(), ListUsersViewMvc.Listener {
         super.onCreate(savedInstanceState)
 
         injector.inject(this)
-        listUsersViewMvc = compositionRoot.viewMvcFactory.newListUsersViewMvcFactory(null)
+        listUsersViewMvc = viewMvcFactory.newListUsersViewMvcFactory(null)
         setContentView(listUsersViewMvc.rootView)
     }
 

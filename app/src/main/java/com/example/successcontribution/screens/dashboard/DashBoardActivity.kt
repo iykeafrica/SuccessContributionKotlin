@@ -33,12 +33,13 @@ class DashBoardActivity : BaseActivity(), DashBoardViewMvc.Listener {
     @field:Service private lateinit var mySharedPreference: MySharedPreference
     @field:Service private lateinit var dialogsNavigator: DialogsNavigator
     @field:Service private lateinit var screensNavigator: ScreensNavigator
+    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         injector.inject(this)
-        dashBoardViewMvc = compositionRoot.viewMvcFactory.newDashBoardViewMvcFactory(null)
+        dashBoardViewMvc = viewMvcFactory.newDashBoardViewMvcFactory(null)
         setContentView(dashBoardViewMvc.rootView)
 
         if (intent.hasExtra(LOGIN_ROLE_KEY)) {

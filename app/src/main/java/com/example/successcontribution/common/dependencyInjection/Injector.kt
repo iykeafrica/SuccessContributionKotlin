@@ -8,7 +8,7 @@ import com.example.successcontribution.screens.common.preferences.MySharedPrefer
 import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 import java.lang.reflect.Field
 
-class Injector(private val compositionRoot: PresentationCompositionRoot) {
+class Injector(private val component: PresentationComponent) {
 
     fun inject(client: Any) {
         for (field in getAllFields(client)) {
@@ -43,22 +43,22 @@ class Injector(private val compositionRoot: PresentationCompositionRoot) {
     private fun getServiceForClass(type: Class<*>): Any {
         when (type) {
             DialogsNavigator::class.java -> {
-                return compositionRoot.dialogsNavigator
+                return component.dialogsNavigator()
             }
             ScreensNavigator::class.java -> {
-                return compositionRoot.screensNavigator
+                return component.screensNavigator()
             }
             FetchUsersUseCase::class.java -> {
-                return compositionRoot.fetchUsersUseCase
+                return component.fetchUsersUseCase()
             }
             AttemptLoginUseCase::class.java -> {
-                return compositionRoot.attemptLoginUseCase
+                return component.attemptLoginUseCase()
             }
             ViewMvcFactory::class.java -> {
-                return compositionRoot.viewMvcFactory
+                return component.viewMvcFactory()
             }
             MySharedPreference::class.java -> {
-                return compositionRoot.mySharedPreference
+                return component.mySharedPreference()
             }
             else -> {
                 throw Exception("unsupported service type: $type")

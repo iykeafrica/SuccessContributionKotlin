@@ -11,6 +11,7 @@ import com.example.successcontribution.screens.common.ScreensNavigator
 import com.example.successcontribution.screens.common.dialogs.DialogsNavigator
 import com.example.successcontribution.screens.common.fragment.BaseFragment
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
+import com.example.successcontribution.screens.common.viewmvc.ViewMvcFactory
 import com.example.successcontribution.shared.Constant.AUTHORIZATION_TOKEN_DEFAULT_KEY
 import com.example.successcontribution.shared.Constant.FIRST_NAME_KEY
 import com.example.successcontribution.shared.Constant.LAST_NAME_KEY
@@ -28,6 +29,7 @@ class LoginFragment : BaseFragment(), LoginViewMvc.Listener {
     @field:Service private lateinit var attemptLoginUseCase: AttemptLoginUseCase
     @field:Service private lateinit var screensNavigator: ScreensNavigator
     @field:Service private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service private lateinit var viewMvcFactory: ViewMvcFactory
 
     private lateinit var username: String
     private lateinit var password: String
@@ -43,7 +45,7 @@ class LoginFragment : BaseFragment(), LoginViewMvc.Listener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        loginViewMvc = compositionRoot.viewMvcFactory.newLoginViewMvcFactory(container)
+        loginViewMvc = viewMvcFactory.newLoginViewMvcFactory(container)
         return loginViewMvc.rootView
     }
 
