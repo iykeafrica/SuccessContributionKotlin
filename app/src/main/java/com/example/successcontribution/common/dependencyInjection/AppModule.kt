@@ -1,18 +1,22 @@
 package com.example.successcontribution.common.dependencyInjection
 
 import android.app.Application
+import android.content.Context
 import androidx.annotation.UiThread
 import com.example.successcontribution.networking.SuccessContributionsApi
 import com.example.successcontribution.screens.common.preferences.MySharedPreference
 import com.example.successcontribution.shared.Constant
+import dagger.Module
+import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+@Module
 @UiThread
-class AppCompositionRoot(val application: Application) {
+class AppModule(private val application: Application) {
     private val loggingInterceptor = run {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.apply {
@@ -34,12 +38,26 @@ class AppCompositionRoot(val application: Application) {
             .build()
     }
 
-    val successContributionsApi: SuccessContributionsApi by lazy {
+    private val successContributionsApi: SuccessContributionsApi by lazy {
         retrofit.create(SuccessContributionsApi::class.java)
     }
 
-    val mySharedPreference by lazy {
-        MySharedPreference(application.applicationContext)
+    private val applicationContext = application.applicationContext
+
+    private val mySharedPreference by lazy {
+        MySharedPreference(applicationContext)
     }
+
+    @Provides
+    fun application(): Application = application
+
+    @Provides
+    fun applicationContext(): Context = applicationContext
+
+    @Provides
+    fun successContributionsApi() = successContributionsApi
+
+    @Provides
+    fun mySharedPreference() = mySharedPreference
 
 }
